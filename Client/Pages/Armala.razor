@@ -28,7 +28,7 @@
 		@foreach(var item in ingredientes)
 		{
 			<div class="form-check">
-			<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+				<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" @onchange="eventArg => IngSel(item,eventArg)">
 			<label class="form-check-label" for="flexCheckDefault">
 				@item.Nombre
 			</label>
@@ -36,12 +36,25 @@
 		}
 		
 	</div>
-	<div class="col-6">
-		@tamselec.Tamano
-		@tamselec.Precio
-		<br />
-		@tiposelec.Tipo
-		@tiposelec.Precio
+	<div class="col-6" style="background-image: url(https://cdn.wallpapersafari.com/18/46/RHmUqp.jpg); background-size: contain; background-repeat: repeat; background-blur: 50px;">
+		<div style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+			<strong>Tamaño:</strong> @tamselec.Tamano
+		</div>
+		<div style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+			<strong>Precio:</strong> @tamselec.Precio
+		</div>
+		<div style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+			<strong>Tipo:</strong> @tiposelec.Tipo
+		</div>
+		<div style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+			<strong>Precio:</strong> @tiposelec.Precio
+		</div>
+		<div style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+			<strong>Ingredientes:</strong> @costoing
+		</div>
+		<div style="border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+			<strong>Total:</strong> @totalpizza
+		</div>
 	</div>
 
 </div>
@@ -56,6 +69,10 @@
 	Tamanos tamselec = new Tamanos();
 	TipoMasa tiposelec = new TipoMasa();
 	Ingrediente ingrediente = new Ingrediente();
+
+	List<Ingrediente> ingredientesSel = new List<Ingrediente>();
+	float costoing = 0.0f;
+	float totalpizza = 0.0f;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -92,6 +109,7 @@
 		int idint = int.Parse(id);
 
 		tamselec = tamanos.Where(tamano => tamano.Id == idint).FirstOrDefault();
+		totalpizza = tamselec.Precio + tiposelec.Precio + costoing;
 	}
 	private void TipoFunc(ChangeEventArgs args)
 	{
@@ -100,5 +118,27 @@
 		int idint = int.Parse(id);
 
 		tiposelec = tipos.Where(tipos => tipos.Id == idint).FirstOrDefault();
+		totalpizza = tamselec.Precio + tiposelec.Precio + costoing;
+	}
+	private void IngSel(Ingrediente ingrediente, ChangeEventArgs args)
+	{
+		bool prueba = bool.Parse(args.Value.ToString());
+		//var ingredientesel = ingrediente;
+
+		if (prueba)
+		{
+			ingredientesSel.Add(ingrediente);
+
+		}
+		else
+		{
+			ingredientesSel.Remove(ingrediente);
+		}
+		foreach(var item in ingredientesSel)
+		{
+			costoing += item.Precio;
+		}
+		totalpizza = tamselec.Precio + tiposelec.Precio + costoing;
+
 	}
 }
