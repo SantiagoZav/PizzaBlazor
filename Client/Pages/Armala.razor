@@ -1,5 +1,7 @@
 ﻿@page "/armala"
 @using PizzaBlazor.Shared.Model;
+@inject HttpClient client;
+
 <i class="fa-solid fa-pizza-slice fa-beat"></i><h3>Armala tuu</h3>
 
 <div class="row">
@@ -70,37 +72,19 @@
 	TipoMasa tiposelec = new TipoMasa();
 	Ingrediente ingrediente = new Ingrediente();
 
+	Ingrediente newIngrediente = new Ingrediente();
+
 	List<Ingrediente> ingredientesSel = new List<Ingrediente>();
 	float costoing = 0.0f;
 	float totalpizza = 0.0f;
 
 	protected override async Task OnInitializedAsync()
 	{
-		tamanos = new List<Tamanos>()
-		{
-			new Tamanos{Id = 1, Tamano="Personal", Precio=10.0f },
-			new Tamanos{Id = 2, Tamano="Chica", Precio=20.0f },
-			new Tamanos{Id = 3, Tamano="Mediana", Precio=30.0f },
-			new Tamanos{Id = 4, Tamano="Grande", Precio=40.0f },
-
-		};
-		tipos = new List<TipoMasa>()
-		{
-			new TipoMasa{Id = 1, Tipo="Tradicional", Precio=20.0f },
-			new TipoMasa{Id = 2, Tipo="Orilla rellena de queso", Precio=25.0f },
-			new TipoMasa{Id = 3, Tipo="Crunch", Precio=37.0f },
-			new TipoMasa{Id = 4, Tipo="Sarten", Precio=42.0f },
-
-		};
-		ingredientes = new List<Ingrediente>()
-		{
-			new Ingrediente{Id = 1, Nombre="Piña", Precio=10.0f },
-			new Ingrediente{Id = 2, Nombre="Japon", Precio=15.0f },
-			new Ingrediente{Id = 3, Nombre="Peperoni", Precio=7.0f },
-			new Ingrediente{Id = 4, Nombre="Hongos", Precio=23.0f },
-			new Ingrediente{Id = 5, Nombre="Pastor", Precio=20.0f },
-
-		};
+		newIngrediente = new Ingrediente { Nombre = "Sabritas", Precio = 45.0f };
+		await client.PostAsJsonAsync("api/Catalogos/newingrediente", newIngrediente);
+		tamanos = await client.GetFromJsonAsync<List<Tamanos>>("api/Catalogos");
+		tipos = await client.GetFromJsonAsync<List<TipoMasa>>("api/Catalogos/tipomasa");
+		ingredientes = await client.GetFromJsonAsync<List<Ingrediente>>("api/Catalogos/ingrediente");
 	}
 	private void TamanoFunc(ChangeEventArgs args)
 	{
