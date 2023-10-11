@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PizzaBlazor.Shared.Model;
 
 namespace PizzaBlazor.Server.Data
 {
-	public class AplicationDbContext:DbContext
+	public class AplicationDbContext:IdentityDbContext 
 	{
         public AplicationDbContext(DbContextOptions options):base(options)
         {

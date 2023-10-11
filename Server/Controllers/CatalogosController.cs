@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PizzaBlazor.Server.Data;
@@ -6,6 +8,7 @@ using PizzaBlazor.Shared.Model;
 
 namespace PizzaBlazor.Server.Controllers
 {
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class CatalogosController : ControllerBase
@@ -35,6 +38,7 @@ namespace PizzaBlazor.Server.Controllers
 			//return NotFound();
 			//return NoContent();
 		}
+		
 		[HttpGet("tipomasa")]//si se tiene mas de uno es mejor ponerle un nombre si es 
 		//diferente el http pueden no tener nombre, si ya hay mas de uno entonces si
 		public async Task<List<TipoMasa>>Masas()
